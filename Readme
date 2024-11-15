@@ -1,0 +1,35 @@
+# Vehicle Detection Project
+
+This project implements vehicle detection using Faster R-CNN and YOLO algorithms. It analyzes and compares the impact of different algorithms on vehicle recognition.
+
+## Project Structure
+
+- **FasterRCNN**: Vehicle detection using the Faster R-CNN algorithm.
+- **YOLO**: Vehicle detection using the YOLO algorithm.
+- **models**: Contains the trained models.
+- **Show**: Displays the detection results.
+
+## Results Display
+
+To view the detection results and compare the performance of the two algorithms, follow these steps:
+
+1. Navigate to the `Show` directory:
+    ```sh
+    cd Show
+    ```
+2. Run the Streamlit application:
+    ```sh
+    streamlit run show.py
+    ```
+3. Upload an image in the Streamlit interface to see the detection results and compare the effectiveness of the two algorithms.
+
+## Training Process
+
+1. **Dataset Preparation**: Use the dataset from Kaggle.
+2. **Dataset Preprocessing**: Preprocess the dataset according to the requirements of each algorithm.
+3. **Model Training**: Train the models using Faster R-CNN and YOLO algorithms.
+4. **Model Evaluation and Display**: Evaluate the models and display the results using Faster R-CNN and YOLO.
+
+---
+
+Feel free to explore the project and see how different algorithms perform in vehicle detection!
