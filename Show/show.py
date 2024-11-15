@@ -1,8 +1,7 @@
 import streamlit as st
-import cv2
 import numpy as np
 from ultralytics import YOLO
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 import pandas as pd
 from predict import picture  
 from frcnn import FRCNN
@@ -10,8 +9,6 @@ from frcnn import FRCNN
 # load the YOLO model
 model_path1 = '../models/yolo_best.pt'
 model1 = YOLO(model_path1)
-
-
 
 # title and description
 st.title("Car Detection App")
@@ -24,8 +21,10 @@ uploaded_file = st.file_uploader("Upload a picture", type=["jpg", "jpeg", "png"]
 
 def process_image_yolo(image, model):
     # Use the YOLO model to detect objects in the image
-    results = model(image)
+    results = model(np.array(image))
     detections = []
+    draw = ImageDraw.Draw(image)
+    font = ImageFont.load_default()
     
     # process the detection results
     for result in results:
@@ -37,24 +36,26 @@ def process_image_yolo(image, model):
                 label_text = f"car {confidence:.2f}"
             else:
                 label_text = f"unknown {confidence:.2f}"
-            cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            cv2.putText(image, label_text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
+            draw.rectangle([x1, y1, x2, y2], outline="green", width=2)
+            draw.text((x1, y1 - 10), label_text, fill="green", font=font)
             detections.append({
                 "Label": "car" if label == 0 else "unknown",
                 "Confidence": confidence,
                 "Bounding Box": f"[{x1}, {y1}, {x2}, {y2}]"
             })
     
-    # Convert the image back to RGB format for displaying with Streamlit
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     return image, detections
 
 def process_image_fastrcnn(image):
-    r_image,all_labels, all_confs, all_boxes = picture(image)
+    r_image, all_labels, all_confs, all_boxes = picture(image)
     detections2 = []
+    draw = ImageDraw.Draw(r_image)
+    font = ImageFont.load_default()
     for label, conf, box in zip(all_labels, all_confs, all_boxes):
         x1, y1, x2, y2 = map(int, box)
         label_text = f"car {conf:.2f}" if label == 0 else f"unknown {conf:.2f}"
+        draw.rectangle([x1, y1, x2, y2], outline="green", width=2)
+        draw.text((x1, y1 - 10), label_text, fill="green", font=font)
         detections2.append({
             "Label": "car",
             "Confidence": conf,
@@ -63,13 +64,12 @@ def process_image_fastrcnn(image):
     return r_image, detections2
 
 if uploaded_file is not None:
-    # Transform the uploaded file into an OpenCV image
-    file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-    image = cv2.imdecode(file_bytes, 1)
+    # Transform the uploaded file into a PIL image
+    image = Image.open(uploaded_file).convert("RGB")
     
     # Process and display images for both models
     image1, detections1 = process_image_yolo(image.copy(), model1)
-    image2, detections2 = process_image_fastrcnn(Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB)))
+    image2, detections2 = process_image_fastrcnn(image.copy())
     
     col1, col2 = st.columns(2)
     with col1:
