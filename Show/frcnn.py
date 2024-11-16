@@ -17,8 +17,8 @@ from utils.utils_bbox import DecodeBox
 class FRCNN(object):
     print("Current working directory:", os.getcwd())
     _defaults = {
-        "model_path"    : '../models/fast_rcnn_last_epoch_weights.pth',
-        "classes_path"  : '../model_data/voc_classes.txt',
+        "model_path"    : './models/fast_rcnn_last_epoch_weights.pth',
+        "classes_path"  : './model_data/voc_classes.txt',
         "backbone"      : "resnet50",
         "confidence"    : 0.4,
         "nms_iou"       : 0.3,

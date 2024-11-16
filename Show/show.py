@@ -7,7 +7,7 @@ from predict import picture
 from frcnn import FRCNN
 
 # load the YOLO model
-model_path1 = '../models/yolo_best.pt'
+model_path1 = './models/yolo_best.pt'
 model1 = YOLO(model_path1)
 
 # title and description
