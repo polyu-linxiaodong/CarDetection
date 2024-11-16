@@ -73,9 +73,9 @@ if uploaded_file is not None:
     
     col1, col2 = st.columns(2)
     with col1:
-        st.image(image1, caption='Predicted Image by YOLO', use_column_width=True)
+        st.image(image1, caption='Predicted Image by YOLO', use_container_width=True)
     with col2:
-        st.image(image2, caption='Predicted Image by Faster R-CNN', use_column_width=True)
+        st.image(image2, caption='Predicted Image by Faster R-CNN', use_container_width=True)
     
     st.markdown("### YOLO Detections")
     df1 = pd.DataFrame(detections1)
